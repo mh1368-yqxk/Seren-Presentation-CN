@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seren - 商业发展计划</title>
+<script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap');
+  :root {
+    --seren-purple: #6C3AED;
+    --seren-purple-dark: #4C1D95;
+    --seren-purple-light: #8B5CF6;
+    --seren-purple-bg: #EDE9FE;
+    --seren-purple-50: #F5F3FF;
+    --seren-indigo: #4338CA;
+    --seren-gradient: linear-gradient(135deg, #6C3AED 0%, #4338CA 50%, #312E81 100%);
+    --seren-gradient-hero: linear-gradient(135deg, #312E81 0%, #4C1D95 30%, #6C3AED 60%, #8B5CF6 100%);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans SC', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #F8F7FC; overflow: hidden; height: 100vh; }
+
+  .slide-container {
+    width: 100vw; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .slide {
+    width: 1200px; height: 675px;
+    background: white; border-radius: 16px;
+    box-shadow: 0 25px 60px rgba(108,58,237,0.12), 0 4px 20px rgba(0,0,0,0.06);
+    position: absolute; opacity: 0; pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: scale(0.95); overflow: hidden;
+  }
+  .slide.active {
+    opacity: 1; pointer-events: auto; transform: scale(1);
+  }
+
+  .nav-bar {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 12px;
+    background: white; padding: 10px 20px; border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1); z-index: 100;
+  }
+  .nav-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--seren-purple); color: white;
+    border: none; cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: var(--seren-purple-dark); transform: scale(1.1); }
+  .nav-btn:disabled { background: #D1D5DB; cursor: not-allowed; transform: none; }
+  .slide-counter { font-size: 14px; font-weight: 600; color: #6B7280; min-width: 60px; text-align: center; }
+  .dot-nav { display: flex; gap: 6px; }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: #D1D5DB;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .dot.active { background: var(--seren-purple); width: 24px; border-radius: 4px; }
+  .dot:hover { background: var(--seren-purple-light); }
+
+  .key-hint {
+    position: fixed; top: 16px; right: 24px;
+    font-size: 11px; color: #9CA3AF; z-index: 100;
+  }
+  .key-hint kbd {
+    background: #F3F4F6; border: 1px solid #E5E7EB; border-radius: 4px;
+    padding: 2px 6px; font-family: inherit; font-size: 11px;
+  }
+
+  .slide-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 48px 0 48px;
+  }
+  .seren-logo {
+    display: flex; align-items: center; gap: 8px; font-weight: 700;
+    font-size: 20px; color: var(--seren-purple);
+  }
+  .seren-logo .s-icon {
+    width: 32px; height: 32px; background: var(--seren-purple);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 18px;
+  }
+  .slide-tag {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--seren-purple-light);
+    background: var(--seren-purple-bg); padding: 4px 12px; border-radius: 20px;
+  }
+  .slide-body { padding: 24px 48px 32px 48px; }
+  .slide-title {
+    font-size: 30px; font-weight: 800; color: #1F2937;
+    line-height: 1.3; margin-bottom: 6px;
+  }
+  .slide-subtitle {
+    font-size: 14px; color: #6B7280; margin-bottom: 20px; line-height: 1.6;
+  }
+  .purple-card {
+    background: var(--seren-purple-50); border: 1px solid #DDD6FE;
+    border-radius: 12px; padding: 16px 20px;
+  }
+  .icon-circle {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .stat-number {
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, #6C3AED, #4338CA);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .metric-label { font-size: 12px; color: #6B7280; font-weight: 500; }
+
+  .hero-slide {
+    background: var(--seren-gradient-hero); color: white; border-radius: 16px;
+  }
+  .hero-slide .slide-title { color: white; font-size: 42px; }
+  .hero-slide .slide-subtitle { color: rgba(255,255,255,0.8); font-size: 17px; }
+
+  .flow-step {
+    display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1;
+  }
+  .flow-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--seren-purple); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px; margin-bottom: 10px;
+  }
+  .flow-connector {
+    width: 40px; height: 2px; background: #DDD6FE; margin-top: 18px; flex-shrink: 0;
+  }
+
+  .timeline-item {
+    position: relative; padding-left: 28px; padding-bottom: 16px;
+    border-left: 2px solid #DDD6FE;
+  }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -6px; top: 4px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--seren-purple); border: 2px solid white;
+  }
+  .timeline-item.active::before { background: #10B981; }
+  .timeline-item.future::before { background: #D1D5DB; }
+
+  .score-ring {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: conic-gradient(var(--seren-purple) var(--pct), #EDE9FE var(--pct));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .score-inner {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: white; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 18px; color: var(--seren-purple);
+  }
+
+  .agent-bubble {
+    background: var(--seren-purple-bg); border-radius: 16px 16px 16px 4px;
+    padding: 12px 16px; font-size: 13px; color: #374151; max-width: 280px;
+  }
+  .user-bubble {
+    background: var(--seren-purple); border-radius: 16px 16px 4px 16px;
+    padding: 12px 16px; font-size: 13px; color: white; max-width: 280px;
+    margin-left: auto;
+  }
+
+  .fullscreen-btn {
+    position: fixed; top: 16px; left: 24px;
+    background: white; border: 1px solid #E5E7EB; border-radius: 8px;
+    padding: 6px 12px; font-size: 12px; color: #6B7280; cursor: pointer;
+    z-index: 100; display: flex; align-items: center; gap: 6px;
+  }
+  .fullscreen-btn:hover { background: #F9FAFB; }
+
+  @media print {
+    .nav-bar, .key-hint, .fullscreen-btn { display: none; }
+    .slide-container { height: auto; page-break-inside: avoid; }
+    .slide { position: relative; opacity: 1; transform: none; margin-bottom: 20px; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<button class="fullscreen-btn" onclick="toggleFullscreen()">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+  全屏
+</button>
+
+<div class="key-hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> 或点击导航</div>
+
+<div class="slide-container">
+
+<!-- ==================== 幻灯片 1: 封面 ==================== -->
+<div class="slide hero-slide active" data-slide="0">
+  <div style="padding: 48px; display: flex; height: 100%;">
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 32px;">
+        <div style="width: 40px; height: 40px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--seren-purple); font-weight: 900; font-size: 22px;">S</div>
+        <span style="font-size: 24px; font-weight: 700;">Seren</span>
+        <span style="font-size: 13px; opacity: 0.6; margin-left: 4px;">Split Your Event Stays</span>
+      </div>
+      <h1 style="font-size: 46px; font-weight: 900; line-height: 1.15; margin-bottom: 16px; color: white;">
+        AI Agent 匹配<br>让同场的我们<br>住得更合拍
+      </h1>
+      <p style="font-size: 16px; opacity: 0.75; margin-bottom: 28px; max-width: 440px; line-height: 1.7;">
+        智能匹配 | 隐私对话 | 安全共住<br>专为真实活动场景与出行而生
+      </p>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;">同场活动</div>
+        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;">同一时间</div>
+        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;">可信赖的人</div>
+        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;">更好的住宿</div>
+      </div>
+    </div>
+    <div style="flex: 0.55; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+      <div style="width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center;">
+        <div style="width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;">
+          <div style="font-size: 72px;">&#129302;</div>
+        </div>
+      </div>
+      <div style="margin-top: 24px; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 12px; display: flex; align-items: center; gap: 10px;">
+        <div style="width: 10px; height: 10px; background: #10B981; border-radius: 50%;"></div>
+        <span style="font-size: 14px; font-weight: 600;">匹配成功！</span>
+        <span style="font-size: 22px; font-weight: 800; color: #A7F3D0;">95%</span>
+        <span style="font-size: 12px; opacity: 0.7;">匹配度</span>
+      </div>
+      <div style="position: absolute; top: 30px; right: 0; background: rgba(255,255,255,0.12); padding: 8px 14px; border-radius: 10px; font-size: 12px;">
+        &#127926; Taylor Swift 演唱会<br><span style="opacity:0.7">3月8-9日 | 新加坡</span>
+      </div>
+      <div style="position: absolute; bottom: 60px; left: 0; background: rgba(255,255,255,0.12); padding: 8px 14px; border-radius: 10px; font-size: 12px;">
+        &#127968; 找室友中<br><span style="opacity:0.7">预算: &#165;1000/晚</span>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; bottom: 20px; left: 48px; font-size: 12px; opacity: 0.4;">商业发展计划 | 案例竞赛 2026</div>
+</div>
+
+<!-- ==================== 幻灯片 2: 需求分析 ==================== -->
+<div class="slide" data-slide="1">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块一</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">需求分析</h2>
+    <p class="slide-subtitle">一个位于现场活动与旅行交汇处的巨大未开发市场</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+      <div class="purple-card" style="text-align: center;">
+        <div class="stat-number">1.5万亿</div>
+        <div class="metric-label">2030年全球现场活动市场（美元）</div>
+      </div>
+      <div class="purple-card" style="text-align: center;">
+        <div class="stat-number">67%</div>
+        <div class="metric-label">独自出行者每年参加活动</div>
+      </div>
+      <div class="purple-card" style="text-align: center;">
+        <div class="stat-number">42%</div>
+        <div class="metric-label">愿意在可信赖的前提下合住</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px;">
+      <div>
+        <h3 style="font-size: 15px; font-weight: 700; color: #1F2937; margin-bottom: 12px;">&#127919; 目标用户画像</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px; background: #F9FAFB; padding: 10px 14px; border-radius: 10px;">
+            <div class="icon-circle" style="background: #FEF3C7; font-size: 20px;">&#127926;</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: #1F2937;">K-pop / 演唱会粉丝</div>
+              <div style="font-size: 11px; color: #6B7280;">跨境追星，需要可信赖的同住伙伴</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; background: #F9FAFB; padding: 10px 14px; border-radius: 10px;">
+            <div class="icon-circle" style="background: #DBEAFE; font-size: 20px;">&#127960;</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: #1F2937;">音乐节 / 展会参与者</div>
+              <div style="font-size: 11px; color: #6B7280;">注重预算，寻找志同道合的旅伴</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; background: #F9FAFB; padding: 10px 14px; border-radius: 10px;">
+            <div class="icon-circle" style="background: #D1FAE5; font-size: 20px;">&#9992;&#65039;</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: #1F2937;">独行旅客</div>
+              <div style="font-size: 11px; color: #6B7280;">想要社交体验，但不想承担随机室友的风险</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size: 15px; font-weight: 700; color: #1F2937; margin-bottom: 12px;">&#128200; 市场信号</h3>
+        <div style="background: #F9FAFB; border-radius: 12px; padding: 16px;">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; color: #6B7280;">Airbnb 合住房间</span>
+              <span style="font-size: 12px; font-weight: 600; color: #EF4444;">无活动匹配功能</span>
+            </div>
+            <div style="height: 1px; background: #E5E7EB;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; color: #6B7280;">微博 / Twitter 拼房群</span>
+              <span style="font-size: 12px; font-weight: 600; color: #F59E0B;">纯手动，无信任机制</span>
+            </div>
+            <div style="height: 1px; background: #E5E7EB;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; color: #6B7280;">沙发客 / 青旅平台</span>
+              <span style="font-size: 12px; font-weight: 600; color: #EF4444;">无生活习惯匹配</span>
+            </div>
+            <div style="height: 1px; background: #E5E7EB;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; color: #6B7280;">微信群 / 小红书拼房帖</span>
+              <span style="font-size: 12px; font-weight: 600; color: #F59E0B;">信息量大，零筛选</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 12px; background: var(--seren-purple); color: white; border-radius: 10px; padding: 12px 16px; font-size: 12px; text-align: center;">
+          <strong>市场空白：</strong>没有平台能同时结合 活动场景 + 生活匹配 + 信任验证
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 3: 行业痛点 ==================== -->
+<div class="slide" data-slide="2">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块二</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">行业痛点</h2>
+    <p class="slide-subtitle">真实的活动场景，复杂的匹配难题。现有方案无法解决的三大核心痛点。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+      <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 14px; padding: 24px; text-align: center;">
+        <div style="font-size: 36px; margin-bottom: 12px;">&#128566;</div>
+        <h3 style="font-size: 16px; font-weight: 700; color: #991B1B; margin-bottom: 8px;">信息不对称</h3>
+        <p style="font-size: 12px; color: #7F1D1D; line-height: 1.6;">
+          无法确认对方是否真的去同一场活动。住宿偏好在承诺之前完全不透明。
+        </p>
+      </div>
+      <div style="background: #FFF7ED; border: 1px solid #FED7AA; border-radius: 14px; padding: 24px; text-align: center;">
+        <div style="font-size: 36px; margin-bottom: 12px;">&#128172;</div>
+        <h3 style="font-size: 16px; font-weight: 700; color: #9A3412; margin-bottom: 8px;">沟通成本高</h3>
+        <p style="font-size: 12px; color: #7C2D12; line-height: 1.6;">
+          需要大量手动沟通预算、日程、生活习惯和偏好，才能判断是否合适。
+        </p>
+      </div>
+      <div style="background: #FEF3C7; border: 1px solid #FDE68A; border-radius: 14px; padding: 24px; text-align: center;">
+        <div style="font-size: 36px; margin-bottom: 12px;">&#9888;&#65039;</div>
+        <h3 style="font-size: 16px; font-weight: 700; color: #92400E; margin-bottom: 8px;">信任风险大</h3>
+        <p style="font-size: 12px; color: #78350F; line-height: 1.6;">
+          跟网上陌生人共享住宿空间，存在真实的人身安全和财务风险，且零验证。
+        </p>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div style="background: #F9FAFB; border-radius: 14px; padding: 20px;">
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 12px;">&#128680; 更多摩擦点</h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <div style="color: #EF4444; font-size: 14px; margin-top: 2px;">&#10006;</div>
+            <div style="font-size: 12px; color: #4B5563; line-height: 1.5;"><strong>临时变动</strong> -- 计划变更，无动态重新匹配机制</div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <div style="color: #EF4444; font-size: 14px; margin-top: 2px;">&#10006;</div>
+            <div style="font-size: 12px; color: #4B5563; line-height: 1.5;"><strong>隐私暴露</strong> -- 在确认匹配前就必须公开个人信息</div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <div style="color: #EF4444; font-size: 14px; margin-top: 2px;">&#10006;</div>
+            <div style="font-size: 12px; color: #4B5563; line-height: 1.5;"><strong>费用纠纷</strong> -- 没有标准化的费用分摊机制</div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <div style="color: #EF4444; font-size: 14px; margin-top: 2px;">&#10006;</div>
+            <div style="font-size: 12px; color: #4B5563; line-height: 1.5;"><strong>语言障碍</strong> -- 跨境活动让沟通更加困难</div>
+          </div>
+        </div>
+      </div>
+      <div style="background: var(--seren-purple); border-radius: 14px; padding: 20px; color: white;">
+        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">&#10024; Seren 的解决方案</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">&#129302;</div>
+            <div style="font-size: 12px; line-height: 1.5;"><strong>AI 深度需求对话</strong> -- Agent 通过自然对话全面了解需求</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">&#128279;</div>
+            <div style="font-size: 12px; line-height: 1.5;"><strong>多维度智能匹配</strong> -- 超越日期和预算：生活方式 + 信任评分</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">&#128274;</div>
+            <div style="font-size: 12px; line-height: 1.5;"><strong>隐私保护机制</strong> -- Agent 间协商，不暴露私人数据</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px;">&#128736;&#65039;</div>
+            <div style="font-size: 12px; line-height: 1.5;"><strong>全流程协同支持</strong> -- 从匹配到入住，Agent 全程协助</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 4: 方案设计 - 工作流程 ==================== -->
+<div class="slide" data-slide="3">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块三</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">方案设计：Agent 匹配如何工作</h2>
+    <p class="slide-subtitle">两个 AI Agent，隐私对话，更智能的匹配。</p>
+
+    <div style="display: flex; align-items: flex-start; justify-content: center; gap: 0; margin: 12px 0 24px 0;">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div style="font-size: 24px; margin-bottom: 6px;">&#128172;</div>
+        <div style="font-size: 13px; font-weight: 700; color: #1F2937;">深入了解你</div>
+        <div style="font-size: 11px; color: #6B7280; max-width: 140px; margin-top: 4px;">AI Agent 通过私密对话了解你的偏好</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div style="font-size: 24px; margin-bottom: 6px;">&#128269;</div>
+        <div style="font-size: 13px; font-weight: 700; color: #1F2937;">寻找合适的人</div>
+        <div style="font-size: 11px; color: #6B7280; max-width: 140px; margin-top: 4px;">Agent 在网络中搜索同一活动的人</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div style="font-size: 24px; margin-bottom: 6px;">&#129302;&#8596;&#65039;&#129302;</div>
+        <div style="font-size: 13px; font-weight: 700; color: #1F2937;">Agent 间协商</div>
+        <div style="font-size: 11px; color: #6B7280; max-width: 140px; margin-top: 4px;">双方 Agent 私下检查敏感话题的兼容性</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div style="font-size: 24px; margin-bottom: 6px;">&#127775;</div>
+        <div style="font-size: 13px; font-weight: 700; color: #1F2937;">你来决定</div>
+        <div style="font-size: 11px; color: #6B7280; max-width: 140px; margin-top: 4px;">查看最佳匹配和清晰的兼容性原因</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div style="font-size: 24px; margin-bottom: 6px;">&#128588;</div>
+        <div style="font-size: 13px; font-weight: 700; color: #1F2937;">连接 & 入住</div>
+        <div style="font-size: 11px; color: #6B7280; max-width: 140px; margin-top: 4px;">协调预订、支付和入住事宜</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-top: 4px;">
+      <div style="background: #F0FDF4; border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 14px; margin-bottom: 4px;">&#128274;</div>
+        <div style="font-size: 11px; font-weight: 600; color: #166534;">默认隐私保护</div>
+        <div style="font-size: 10px; color: #15803D;">你决定分享什么</div>
+      </div>
+      <div style="background: #EFF6FF; border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 14px; margin-bottom: 4px;">&#129302;</div>
+        <div style="font-size: 11px; font-weight: 600; color: #1E40AF;">AI 为你服务</div>
+        <div style="font-size: 10px; color: #1D4ED8;">Agent 代劳繁琐事务</div>
+      </div>
+      <div style="background: #FDF4FF; border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 14px; margin-bottom: 4px;">&#10024;</div>
+        <div style="font-size: 11px; font-weight: 600; color: #86198F;">兼容而非随机</div>
+        <div style="font-size: 10px; color: #A21CAF;">质量优于数量</div>
+      </div>
+      <div style="background: #F0F9FF; border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 14px; margin-bottom: 4px;">&#128737;&#65039;</div>
+        <div style="font-size: 11px; font-weight: 600; color: #0E7490;">安全可信赖</div>
+        <div style="font-size: 10px; color: #0891B2;">实名认证，安全系统</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 5: Agent 理解你 ==================== -->
+<div class="slide" data-slide="4">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块三</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">你的 Agent 深入理解你的需求</h2>
+    <p class="slide-subtitle">深度理解带来更好的匹配。你的 Agent 捕捉多维度偏好。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px;">
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 14px;">&#127919; 匹配维度</h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #F5F3FF; border-radius: 8px;">
+            <span style="font-size: 16px;">&#128197;</span>
+            <div><div style="font-size: 12px; font-weight: 600; color: #1F2937;">行程信息</div><div style="font-size: 10px; color: #6B7280;">活动、日期、到达/出发、交通方式</div></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #F5F3FF; border-radius: 8px;">
+            <span style="font-size: 16px;">&#127968;</span>
+            <div><div style="font-size: 12px; font-weight: 600; color: #1F2937;">住宿偏好</div><div style="font-size: 10px; color: #6B7280;">位置、预算、房型、床位结构</div></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #F5F3FF; border-radius: 8px;">
+            <span style="font-size: 16px;">&#127769;</span>
+            <div><div style="font-size: 12px; font-weight: 600; color: #1F2937;">生活习惯</div><div style="font-size: 10px; color: #6B7280;">作息时间、整洁度、吸烟、访客</div></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #F5F3FF; border-radius: 8px;">
+            <span style="font-size: 16px;">&#128100;</span>
+            <div><div style="font-size: 12px; font-weight: 600; color: #1F2937;">个人偏好</div><div style="font-size: 10px; color: #6B7280;">性别舒适度、年龄范围、语言、价值观</div></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #FEF2F2; border-radius: 8px;">
+            <span style="font-size: 16px;">&#128683;</span>
+            <div><div style="font-size: 12px; font-weight: 600; color: #991B1B;">不可接受项</div><div style="font-size: 10px; color: #6B7280;">你绝对无法接受的硬性条件</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 14px;">&#128172; Agent 对话演示</h3>
+        <div style="background: #F9FAFB; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <div style="width: 28px; height: 28px; background: var(--seren-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0;">&#129302;</div>
+            <div class="agent-bubble">你好！我帮你找到最合适的同住伙伴。先聊聊，你要去参加什么活动？</div>
+          </div>
+          <div class="user-bubble">我要去曼谷看 Coldplay 演唱会，2月3-4号</div>
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <div style="width: 28px; height: 28px; background: var(--seren-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0;">&#129302;</div>
+            <div class="agent-bubble">好的！你每晚的预算范围大概是多少？</div>
+          </div>
+          <div class="user-bubble">大概每晚500-800元左右</div>
+          <div style="display: flex; align-items: flex-start; gap: 8px;">
+            <div style="width: 28px; height: 28px; background: var(--seren-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0;">&#129302;</div>
+            <div class="agent-bubble">你打呼噜吗？对噪音敏感吗？能接受合住一间房还是需要分床？</div>
+          </div>
+        </div>
+        <div style="margin-top: 12px; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 10px; padding: 10px 14px;">
+          <div style="font-size: 11px; font-weight: 600; color: #065F46;">&#128161; 幕后工作</div>
+          <div style="font-size: 11px; color: #047857; margin-top: 4px;">Agent 将你的自然语言转化为结构化的偏好向量，用于多维度评分。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 6: Agent 间协商 ==================== -->
+<div class="slide" data-slide="5">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块三</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">Agent 间智能协商与匹配</h2>
+    <p class="slide-subtitle">隐私 AI 协商。只展示兼容结果。敏感信息绝不暴露。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 0.4fr 1fr; gap: 16px; align-items: center; margin-bottom: 20px;">
+      <div style="background: #F5F3FF; border: 1px solid #DDD6FE; border-radius: 14px; padding: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <div style="width: 32px; height: 32px; background: var(--seren-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px;">&#129302;</div>
+          <div style="font-size: 13px; font-weight: 700; color: var(--seren-purple);">你的 Agent</div>
+        </div>
+        <div style="font-size: 11px; color: #4B5563; display: flex; flex-direction: column; gap: 6px;">
+          <div>&#128197; 日期重叠: 2月3-4日</div>
+          <div>&#128176; 预算范围: &#165;500-800</div>
+          <div>&#128716; 房间类型: 双床房</div>
+          <div>&#127752; 生活方式: 兼容</div>
+          <div>&#128683; 不可接受项: 无冲突</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="font-size: 10px; font-weight: 600; color: var(--seren-purple); text-transform: uppercase; letter-spacing: 1px;">Agent 对话</div>
+        <div style="font-size: 10px; color: #6B7280; text-align: center;">私密进行</div>
+        <div style="display: flex; align-items: center; gap: 4px;">
+          <div style="width: 30px; height: 2px; background: var(--seren-purple);"></div>
+          <div style="font-size: 14px;">&#128172;</div>
+          <div style="width: 30px; height: 2px; background: var(--seren-purple);"></div>
+        </div>
+        <div style="font-size: 10px; color: #9CA3AF; text-align: center; max-width: 100px;">讨论话题：<br>睡眠习惯、预算<br>吸烟、作息时间</div>
+      </div>
+
+      <div style="background: #F5F3FF; border: 1px solid #DDD6FE; border-radius: 14px; padding: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <div style="width: 32px; height: 32px; background: #8B5CF6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px;">&#129302;</div>
+          <div style="font-size: 13px; font-weight: 700; color: #8B5CF6;">对方 Agent</div>
+        </div>
+        <div style="font-size: 11px; color: #4B5563; display: flex; flex-direction: column; gap: 6px;">
+          <div>&#128197; 日期重叠: 2月3-4日</div>
+          <div>&#128176; 预算范围: &#165;450-700</div>
+          <div>&#128716; 房间类型: 双床房</div>
+          <div>&#127752; 生活方式: 兼容</div>
+          <div>&#128683; 不可接受项: 无冲突</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 14px; padding: 18px; text-align: center;">
+      <div style="font-size: 14px; font-weight: 700; color: #065F46; margin-bottom: 6px;">&#128274; 你只看到结果，而非敏感细节</div>
+      <div style="font-size: 12px; color: #047857;">只有通过初步兼容性筛选后，Agent 才会推荐你们连接。你的私人信息在你批准之前绝不会被分享。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 7: 匹配结果 ==================== -->
+<div class="slide" data-slide="6">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块三</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">智能匹配结果</h2>
+    <p class="slide-subtitle">清晰的兼容性。可解释的评分。由你决定。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div>
+        <div style="background: white; border: 1px solid #E5E7EB; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div class="score-ring" style="--pct: 95%;"><div class="score-inner">95%</div></div>
+            <div style="flex: 1;">
+              <div style="font-size: 14px; font-weight: 700; color: #1F2937;">小雨</div>
+              <div style="font-size: 11px; color: #6B7280;">Coldplay 演唱会 | 2月3-4日 | &#165;600/晚</div>
+              <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+                <span style="background: #ECFDF5; color: #065F46; font-size: 10px; padding: 2px 8px; border-radius: 4px;">双床</span>
+                <span style="background: #ECFDF5; color: #065F46; font-size: 10px; padding: 2px 8px; border-radius: 4px;">不吸烟</span>
+                <span style="background: #ECFDF5; color: #065F46; font-size: 10px; padding: 2px 8px; border-radius: 4px;">早起型</span>
+              </div>
+            </div>
+            <button style="background: var(--seren-purple); color: white; border: none; border-radius: 8px; padding: 8px 14px; font-size: 11px; font-weight: 600; cursor: pointer;">查看详情</button>
+          </div>
+        </div>
+        <div style="background: white; border: 1px solid #E5E7EB; border-radius: 14px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div class="score-ring" style="--pct: 88%;"><div class="score-inner">88%</div></div>
+            <div style="flex: 1;">
+              <div style="font-size: 14px; font-weight: 700; color: #1F2937;">Lina</div>
+              <div style="font-size: 11px; color: #6B7280;">Coldplay 演唱会 | 2月3-4日 | &#165;750/晚</div>
+              <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+                <span style="background: #ECFDF5; color: #065F46; font-size: 10px; padding: 2px 8px; border-radius: 4px;">双床</span>
+                <span style="background: #ECFDF5; color: #065F46; font-size: 10px; padding: 2px 8px; border-radius: 4px;">不吸烟</span>
+                <span style="background: #FFF7ED; color: #9A3412; font-size: 10px; padding: 2px 8px; border-radius: 4px;">夜猫子</span>
+              </div>
+            </div>
+            <button style="background: var(--seren-purple); color: white; border: none; border-radius: 8px; padding: 8px 14px; font-size: 11px; font-weight: 600; cursor: pointer;">查看详情</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 12px;">兼容性分解</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;"><span style="color: #374151; font-weight: 500;">日期匹配</span><span style="color: var(--seren-purple); font-weight: 700;">100%</span></div>
+            <div style="height: 8px; background: #EDE9FE; border-radius: 4px;"><div style="height: 100%; width: 100%; background: var(--seren-purple); border-radius: 4px;"></div></div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;"><span style="color: #374151; font-weight: 500;">预算匹配</span><span style="color: var(--seren-purple); font-weight: 700;">90%</span></div>
+            <div style="height: 8px; background: #EDE9FE; border-radius: 4px;"><div style="height: 100%; width: 90%; background: var(--seren-purple); border-radius: 4px;"></div></div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;"><span style="color: #374151; font-weight: 500;">住宿偏好</span><span style="color: var(--seren-purple); font-weight: 700;">95%</span></div>
+            <div style="height: 8px; background: #EDE9FE; border-radius: 4px;"><div style="height: 100%; width: 95%; background: var(--seren-purple); border-radius: 4px;"></div></div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;"><span style="color: #374151; font-weight: 500;">生活习惯</span><span style="color: var(--seren-purple); font-weight: 700;">88%</span></div>
+            <div style="height: 8px; background: #EDE9FE; border-radius: 4px;"><div style="height: 100%; width: 88%; background: var(--seren-purple); border-radius: 4px;"></div></div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;"><span style="color: #374151; font-weight: 500;">价值观 & 兴趣</span><span style="color: var(--seren-purple); font-weight: 700;">92%</span></div>
+            <div style="height: 8px; background: #EDE9FE; border-radius: 4px;"><div style="height: 100%; width: 92%; background: var(--seren-purple); border-radius: 4px;"></div></div>
+          </div>
+        </div>
+        <div style="margin-top: 14px; background: #F5F3FF; border-radius: 10px; padding: 12px;">
+          <div style="font-size: 12px; font-weight: 600; color: var(--seren-purple); margin-bottom: 4px;">&#128161; 为什么匹配？</div>
+          <div style="font-size: 11px; color: #4B5563;">相似的生活习惯，相同的优先级，无不可接受项冲突。都喜欢安静的夜晚，有共同的追星兴趣。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 8: 多维匹配模型 ==================== -->
+<div class="slide" data-slide="7">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块三</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">多维匹配模型：不仅仅是时间和预算</h2>
+    <p class="slide-subtitle">Seren Agent 基于三大图谱进行综合匹配评估。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div style="display: flex; align-items: center; justify-content: center;">
+        <svg width="360" height="320" viewBox="0 0 360 320">
+          <circle cx="180" cy="100" r="80" fill="#EDE9FE" stroke="#DDD6FE" stroke-width="2" opacity="0.6"/>
+          <circle cx="110" cy="240" r="80" fill="#DBEAFE" stroke="#BFDBFE" stroke-width="2" opacity="0.6"/>
+          <circle cx="250" cy="240" r="80" fill="#D1FAE5" stroke="#A7F3D0" stroke-width="2" opacity="0.6"/>
+          <circle cx="180" cy="180" r="30" fill="var(--seren-purple)" opacity="0.15"/>
+          <text x="180" y="75" text-anchor="middle" font-size="13" font-weight="700" fill="#6C3AED">参与者图谱</text>
+          <text x="180" y="92" text-anchor="middle" font-size="10" fill="#7C3AED">同一活动、同一时间</text>
+          <text x="110" y="225" text-anchor="middle" font-size="13" font-weight="700" fill="#2563EB">住宿图谱</text>
+          <text x="110" y="242" text-anchor="middle" font-size="10" fill="#3B82F6">房间需求 + 习惯</text>
+          <text x="250" y="225" text-anchor="middle" font-size="13" font-weight="700" fill="#059669">信任图谱</text>
+          <text x="250" y="242" text-anchor="middle" font-size="10" fill="#10B981">验证 + 评价</text>
+          <text x="180" y="176" text-anchor="middle" font-size="14" font-weight="800" fill="var(--seren-purple)">S</text>
+          <text x="180" y="192" text-anchor="middle" font-size="9" fill="var(--seren-purple)">匹配</text>
+          <text x="180" y="55" text-anchor="middle" font-size="20">&#127926;</text>
+          <text x="70" y="260" text-anchor="middle" font-size="20">&#127968;</text>
+          <text x="290" y="260" text-anchor="middle" font-size="20">&#128737;&#65039;</text>
+        </svg>
+      </div>
+
+      <div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: #F5F3FF; border-radius: 10px;">
+            <div style="font-size: 12px; margin-top: 2px;">&#9745;&#65039;</div>
+            <div><div style="font-size: 12px; font-weight: 700; color: #1F2937;">活动与场次匹配度</div><div style="font-size: 11px; color: #6B7280;">相同活动、重叠演出日期、兼容的出行时间窗口</div></div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: #F5F3FF; border-radius: 10px;">
+            <div style="font-size: 12px; margin-top: 2px;">&#9745;&#65039;</div>
+            <div><div style="font-size: 12px; font-weight: 700; color: #1F2937;">住宿需求匹配度</div><div style="font-size: 11px; color: #6B7280;">预算区间重叠、房型偏好、距场馆距离、入住方式</div></div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: #F5F3FF; border-radius: 10px;">
+            <div style="font-size: 12px; margin-top: 2px;">&#9745;&#65039;</div>
+            <div><div style="font-size: 12px; font-weight: 700; color: #1F2937;">生活习惯匹配度</div><div style="font-size: 11px; color: #6B7280;">独处/社交偏好、活动节奏、计划风格、吸烟、作息</div></div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: #F5F3FF; border-radius: 10px;">
+            <div style="font-size: 12px; margin-top: 2px;">&#9745;&#65039;</div>
+            <div><div style="font-size: 12px; font-weight: 700; color: #1F2937;">信任与验证评分</div><div style="font-size: 11px; color: #6B7280;">身份验证、历史同住评价、社交证明</div></div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: #F5F3FF; border-radius: 10px;">
+            <div style="font-size: 12px; margin-top: 2px;">&#9745;&#65039;</div>
+            <div><div style="font-size: 12px; font-weight: 700; color: #1F2937;">历史行为与评价</div><div style="font-size: 11px; color: #6B7280;">每次完成同住后动态更新的信任评分</div></div>
+          </div>
+        </div>
+        <div style="margin-top: 14px; text-align: center;">
+          <div class="stat-number" style="font-size: 42px;">92%</div>
+          <div class="metric-label" style="font-size: 13px;">平均匹配兼容度</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 9: 技术路径 ==================== -->
+<div class="slide" data-slide="8">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块四</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">技术路径</h2>
+    <p class="slide-subtitle">从结构化问卷到完全自主 AI Agent -- 分阶段演进。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+      <div style="border: 2px solid #10B981; border-radius: 14px; padding: 18px; position: relative;">
+        <div style="position: absolute; top: -10px; left: 16px; background: #10B981; color: white; font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 10px;">当前 MVP</div>
+        <h3 style="font-size: 15px; font-weight: 700; color: #1F2937; margin-top: 8px; margin-bottom: 8px;">阶段一：智能表单</h3>
+        <div style="font-size: 11px; color: #6B7280; line-height: 1.7;">
+          <div style="margin-bottom: 5px;">&#9679; 结构化问卷交互界面</div>
+          <div style="margin-bottom: 5px;">&#9679; 基于规则的匹配引擎</div>
+          <div style="margin-bottom: 5px;">&#9679; 硬性资格筛选 + 软性评分</div>
+          <div style="margin-bottom: 5px;">&#9679; 三级兼容度输出</div>
+          <div>&#9679; 社交分享分发策略</div>
+        </div>
+        <div style="margin-top: 10px; background: #ECFDF5; border-radius: 8px; padding: 8px 10px; font-size: 10px; color: #065F46;">
+          <strong>技术栈：</strong>React + Express + Supabase<br>
+          <strong>状态：</strong>已上线（2026年9月 K-pop 演唱会）
+        </div>
+      </div>
+
+      <div style="border: 2px solid var(--seren-purple); border-radius: 14px; padding: 18px; position: relative;">
+        <div style="position: absolute; top: -10px; left: 16px; background: var(--seren-purple); color: white; font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 10px;">下一步</div>
+        <h3 style="font-size: 15px; font-weight: 700; color: #1F2937; margin-top: 8px; margin-bottom: 8px;">阶段二：AI 辅助</h3>
+        <div style="font-size: 11px; color: #6B7280; line-height: 1.7;">
+          <div style="margin-bottom: 5px;">&#9679; 对话式偏好采集</div>
+          <div style="margin-bottom: 5px;">&#9679; NLP 驱动偏好提取</div>
+          <div style="margin-bottom: 5px;">&#9679; ML 增强兼容性评分</div>
+          <div style="margin-bottom: 5px;">&#9679; 可解释的匹配推理</div>
+          <div>&#9679; 预订集成 API</div>
+        </div>
+        <div style="margin-top: 10px; background: #F5F3FF; border-radius: 8px; padding: 8px 10px; font-size: 10px; color: var(--seren-purple-dark);">
+          <strong>技术栈：</strong>+ LLM API + 向量数据库<br>
+          <strong>目标：</strong>2027 Q1
+        </div>
+      </div>
+
+      <div style="border: 2px solid #F59E0B; border-radius: 14px; padding: 18px; position: relative;">
+        <div style="position: absolute; top: -10px; left: 16px; background: #F59E0B; color: white; font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 10px;">愿景</div>
+        <h3 style="font-size: 15px; font-weight: 700; color: #1F2937; margin-top: 8px; margin-bottom: 8px;">阶段三：全 Agent 化</h3>
+        <div style="font-size: 11px; color: #6B7280; line-height: 1.7;">
+          <div style="margin-bottom: 5px;">&#9679; 自主 Agent 间协商匹配</div>
+          <div style="margin-bottom: 5px;">&#9679; 隐私保护的多方匹配</div>
+          <div style="margin-bottom: 5px;">&#9679; 动态信任图谱 + 链上证明</div>
+          <div style="margin-bottom: 5px;">&#9679; 全流程 Agent 协同</div>
+          <div>&#9679; 跨平台 Agent 互操作</div>
+        </div>
+        <div style="margin-top: 10px; background: #FEF3C7; border-radius: 8px; padding: 8px 10px; font-size: 10px; color: #92400E;">
+          <strong>技术栈：</strong>+ MPC 协议 + Agent SDK<br>
+          <strong>目标：</strong>2027 Q3+
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #F9FAFB; border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 20px;">
+      <div style="font-size: 13px; font-weight: 600; color: #374151; white-space: nowrap;">演进路径：</div>
+      <div style="flex: 1; display: flex; align-items: center; gap: 0;">
+        <div style="background: #10B981; color: white; padding: 6px 14px; border-radius: 6px 0 0 6px; font-size: 11px; font-weight: 600; white-space: nowrap;">问卷表单</div>
+        <div style="width: 0; height: 0; border-top: 16px solid transparent; border-bottom: 16px solid transparent; border-left: 12px solid #10B981;"></div>
+        <div style="background: var(--seren-purple); color: white; padding: 6px 14px; font-size: 11px; font-weight: 600; white-space: nowrap;">AI 对话</div>
+        <div style="width: 0; height: 0; border-top: 16px solid transparent; border-bottom: 16px solid transparent; border-left: 12px solid var(--seren-purple);"></div>
+        <div style="background: #F59E0B; color: white; padding: 6px 14px; border-radius: 0 6px 6px 0; font-size: 11px; font-weight: 600; white-space: nowrap;">自主 Agent</div>
+      </div>
+      <div style="font-size: 11px; color: #6B7280; max-width: 220px;">每个阶段都基于上一阶段积累的数据和用户行为模式</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 10: 技术架构 ==================== -->
+<div class="slide" data-slide="9">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块四</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">技术架构</h2>
+    <p class="slide-subtitle">模块化、可扩展的架构，专为渐进式 AI 集成而设计。</p>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: stretch; gap: 12px;">
+        <div style="width: 120px; background: #DBEAFE; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #1E40AF; text-align: center; padding: 8px;">用户层</div>
+        <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+          <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #1E40AF;">移动应用 (React)</div>
+            <div style="font-size: 10px; color: #3B82F6;">行程卡创建 | 匹配查看</div>
+          </div>
+          <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #1E40AF;">Agent 对话界面</div>
+            <div style="font-size: 10px; color: #3B82F6;">对话式偏好采集</div>
+          </div>
+          <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #1E40AF;">分享与分发</div>
+            <div style="font-size: 10px; color: #3B82F6;">社交分享 | 二维码链接</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: stretch; gap: 12px;">
+        <div style="width: 120px; background: #EDE9FE; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--seren-purple); text-align: center; padding: 8px;">Agent 层</div>
+        <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;">
+          <div style="background: #F5F3FF; border: 1px solid #DDD6FE; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: var(--seren-purple);">偏好 Agent</div>
+            <div style="font-size: 10px; color: #7C3AED;">NLP 提取</div>
+          </div>
+          <div style="background: #F5F3FF; border: 1px solid #DDD6FE; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: var(--seren-purple);">匹配 Agent</div>
+            <div style="font-size: 10px; color: #7C3AED;">多维评分</div>
+          </div>
+          <div style="background: #F5F3FF; border: 1px solid #DDD6FE; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: var(--seren-purple);">协商 Agent</div>
+            <div style="font-size: 10px; color: #7C3AED;">A2A 协议</div>
+          </div>
+          <div style="background: #F5F3FF; border: 1px solid #DDD6FE; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: var(--seren-purple);">协同 Agent</div>
+            <div style="font-size: 10px; color: #7C3AED;">预订 + 支付</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: stretch; gap: 12px;">
+        <div style="width: 120px; background: #D1FAE5; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #065F46; text-align: center; padding: 8px;">核心引擎</div>
+        <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;">
+          <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #065F46;">匹配引擎</div>
+            <div style="font-size: 10px; color: #047857;">硬性 + 软性筛选</div>
+          </div>
+          <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #065F46;">信任引擎</div>
+            <div style="font-size: 10px; color: #047857;">验证 + 评分</div>
+          </div>
+          <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #065F46;">活动引擎</div>
+            <div style="font-size: 10px; color: #047857;">列表 + 票务</div>
+          </div>
+          <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #065F46;">安全引擎</div>
+            <div style="font-size: 10px; color: #047857;">举报 + 审核</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: stretch; gap: 12px;">
+        <div style="width: 120px; background: #FEF3C7; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #92400E; text-align: center; padding: 8px;">数据层</div>
+        <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;">
+          <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #92400E;">PostgreSQL</div>
+            <div style="font-size: 10px; color: #B45309;">用户 + 卡片 + 匹配</div>
+          </div>
+          <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #92400E;">向量存储</div>
+            <div style="font-size: 10px; color: #B45309;">偏好嵌入</div>
+          </div>
+          <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #92400E;">图数据库</div>
+            <div style="font-size: 10px; color: #B45309;">信任网络</div>
+          </div>
+          <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; color: #92400E;">Supabase 认证</div>
+            <div style="font-size: 10px; color: #B45309;">身份 + 行级安全</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 11: 商业逻辑 ==================== -->
+<div class="slide" data-slide="10">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块五</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">商业逻辑</h2>
+    <p class="slide-subtitle">基于信任和交易价值的可持续收入模式。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 12px;">&#128176; 收入来源</h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: #F5F3FF; border-radius: 10px; padding: 14px; border-left: 4px solid var(--seren-purple);">
+            <div style="font-size: 13px; font-weight: 700; color: #1F2937;">交易佣金 (5-8%)</div>
+            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">通过平台促成的住宿预订收取佣金</div>
+          </div>
+          <div style="background: #F5F3FF; border-radius: 10px; padding: 14px; border-left: 4px solid #8B5CF6;">
+            <div style="font-size: 13px; font-weight: 700; color: #1F2937;">高级 Agent (SaaS 订阅)</div>
+            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">优先匹配、无限 Agent 对话、高级筛选</div>
+          </div>
+          <div style="background: #F5F3FF; border-radius: 10px; padding: 14px; border-left: 4px solid #A78BFA;">
+            <div style="font-size: 13px; font-weight: 700; color: #1F2937;">活动合作伙伴 (B2B)</div>
+            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">为音乐节、会议、活动方提供白标匹配方案</div>
+          </div>
+          <div style="background: #F5F3FF; border-radius: 10px; padding: 14px; border-left: 4px solid #C4B5FD;">
+            <div style="font-size: 13px; font-weight: 700; color: #1F2937;">住宿推广广告</div>
+            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">认证房源在匹配结果中推广展示</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 12px;">&#128200; 单位经济模型</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+          <div class="purple-card" style="text-align: center;">
+            <div class="stat-number" style="font-size: 28px;">&#165;85</div>
+            <div class="metric-label">每次匹配平均收入</div>
+          </div>
+          <div class="purple-card" style="text-align: center;">
+            <div class="stat-number" style="font-size: 28px;">&#165;18</div>
+            <div class="metric-label">获客成本 (社交裂变)</div>
+          </div>
+          <div class="purple-card" style="text-align: center;">
+            <div class="stat-number" style="font-size: 28px;">3.2x</div>
+            <div class="metric-label">年度复购率</div>
+          </div>
+          <div class="purple-card" style="text-align: center;">
+            <div class="stat-number" style="font-size: 28px;">85%</div>
+            <div class="metric-label">毛利率</div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 10px;">&#128640; 增长飞轮</h3>
+        <div style="background: #F9FAFB; border-radius: 10px; padding: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11px; font-weight: 500; color: #374151; flex-wrap: wrap;">
+          <span style="background: var(--seren-purple); color: white; padding: 4px 10px; border-radius: 6px;">更多活动</span>
+          <span>&#8594;</span>
+          <span style="background: #8B5CF6; color: white; padding: 4px 10px; border-radius: 6px;">更多用户</span>
+          <span>&#8594;</span>
+          <span style="background: #A78BFA; color: white; padding: 4px 10px; border-radius: 6px;">更好匹配</span>
+          <span>&#8594;</span>
+          <span style="background: #C4B5FD; color: white; padding: 4px 10px; border-radius: 6px;">更多信任数据</span>
+          <span>&#8594;</span>
+          <span style="background: #DDD6FE; color: var(--seren-purple-dark); padding: 4px 10px; border-radius: 6px;">更高留存</span>
+          <span>&#8635;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 12: 从匹配到入住 ==================== -->
+<div class="slide" data-slide="11">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块五</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">从匹配到入住：全流程 Agent 协同</h2>
+    <p class="slide-subtitle">我们在每一步都支持你。Agent 在关键节点为你保驾护航。</p>
+
+    <div style="display: flex; align-items: flex-start; justify-content: center; gap: 0; margin: 16px 0 28px 0;">
+      <div class="flow-step">
+        <div style="width: 44px; height: 44px; background: var(--seren-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">&#9989;</div>
+        <div style="font-size: 12px; font-weight: 700; color: #1F2937; margin-top: 8px;">1. 双方确认</div>
+        <div style="font-size: 10px; color: #6B7280; max-width: 120px;">互相了解，建立初步信任</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div style="width: 44px; height: 44px; background: var(--seren-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">&#128221;</div>
+        <div style="font-size: 12px; font-weight: 700; color: #1F2937; margin-top: 8px;">2. 协同订房</div>
+        <div style="font-size: 10px; color: #6B7280; max-width: 120px;">确定住宿方案并达成一致</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div style="width: 44px; height: 44px; background: var(--seren-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">&#128179;</div>
+        <div style="font-size: 12px; font-weight: 700; color: #1F2937; margin-top: 8px;">3. 费用分摊</div>
+        <div style="font-size: 10px; color: #6B7280; max-width: 120px;">安全预订，费用透明分摊</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div style="width: 44px; height: 44px; background: var(--seren-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">&#128188;</div>
+        <div style="font-size: 12px; font-weight: 700; color: #1F2937; margin-top: 8px;">4. 入住准备</div>
+        <div style="font-size: 10px; color: #6B7280; max-width: 120px;">分享航班信息和到达时间</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div style="width: 44px; height: 44px; background: var(--seren-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">&#10084;&#65039;</div>
+        <div style="font-size: 12px; font-weight: 700; color: #1F2937; margin-top: 8px;">5. 评价反馈</div>
+        <div style="font-size: 10px; color: #6B7280; max-width: 120px;">互评反馈，持续优化匹配</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+      <div style="background: #F0FDF4; border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 20px; margin-bottom: 4px;">&#128737;&#65039;</div>
+        <div style="font-size: 11px; font-weight: 700; color: #166534;">信任优先设计</div>
+        <div style="font-size: 10px; color: #15803D;">实名认证 + 活动票务验证</div>
+      </div>
+      <div style="background: #F0FDF4; border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 20px; margin-bottom: 4px;">&#128179;</div>
+        <div style="font-size: 11px; font-weight: 700; color: #166534;">安全支付</div>
+        <div style="font-size: 10px; color: #15803D;">安全、透明、可分摊</div>
+      </div>
+      <div style="background: #F0FDF4; border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 20px; margin-bottom: 4px;">&#128222;</div>
+        <div style="font-size: 11px; font-weight: 700; color: #166534;">7x24 支持</div>
+        <div style="font-size: 10px; color: #15803D;">全程保障你的安全</div>
+      </div>
+      <div style="background: #F0FDF4; border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 20px; margin-bottom: 4px;">&#11088;</div>
+        <div style="font-size: 11px; font-weight: 700; color: #166534;">入住后评价</div>
+        <div style="font-size: 10px; color: #15803D;">帮助建立社区信任</div>
+      </div>
+    </div>
+
+    <div style="background: var(--seren-purple-bg); border: 1px solid #DDD6FE; border-radius: 12px; padding: 14px; display: flex; align-items: center; gap: 16px;">
+      <div style="font-size: 28px;">&#128274;</div>
+      <div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--seren-purple-dark);">安全保障贯穿全程</div>
+        <div style="font-size: 11px; color: #6B7280; display: flex; gap: 16px; margin-top: 4px; flex-wrap: wrap;">
+          <span>&#9989; 身份验证</span>
+          <span>&#9989; 活动验证</span>
+          <span>&#9989; 支付托管</span>
+          <span>&#9989; 隐私保护</span>
+          <span>&#9989; 安全支持</span>
+          <span>&#9989; 争议处理</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 13: 落地规划 ==================== -->
+<div class="slide" data-slide="12">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块六</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">落地规划</h2>
+    <p class="slide-subtitle">从校园验证到全球扩展 -- 24个月路线图。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div>
+        <div style="margin-left: 8px;">
+          <div class="timeline-item active">
+            <div style="font-size: 12px; font-weight: 700; color: #10B981;">2026 Q3 -- 发布 & 验证</div>
+            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">
+              &#9679; MVP 上线，覆盖首尔 K-pop 演唱会<br>
+              &#9679; 500+ 粉丝社区 Beta 用户<br>
+              &#9679; 核心问卷式匹配功能<br>
+              &#9679; 社交裂变分发策略
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div style="font-size: 12px; font-weight: 700; color: var(--seren-purple);">2026 Q4 -- 拓展 & 迭代</div>
+            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">
+              &#9679; 扩展至更多全球 K-pop 活动<br>
+              &#9679; 支付集成 (Stripe)<br>
+              &#9679; 信任验证系统 v1<br>
+              &#9679; 移动端优化 PWA
+            </div>
+          </div>
+          <div class="timeline-item future">
+            <div style="font-size: 12px; font-weight: 700; color: #F59E0B;">2027 Q1-Q2 -- AI 集成</div>
+            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">
+              &#9679; 对话式 AI Agent 偏好采集<br>
+              &#9679; ML 增强兼容性评分<br>
+              &#9679; 扩展至音乐节、展会<br>
+              &#9679; 预订平台 API 集成
+            </div>
+          </div>
+          <div class="timeline-item future" style="border-left: none;">
+            <div style="font-size: 12px; font-weight: 700; color: #9CA3AF;">2027 Q3+ -- 全 Agent 化平台</div>
+            <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">
+              &#9679; Agent 间自主协商匹配<br>
+              &#9679; 跨平台活动覆盖<br>
+              &#9679; B2B 白标解决方案<br>
+              &#9679; 国际化拓展（东南亚、欧洲）
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 12px;">&#127919; 关键里程碑</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+          <div class="purple-card" style="text-align: center;">
+            <div class="stat-number" style="font-size: 24px;">1,000</div>
+            <div class="metric-label">第3个月用户数</div>
+          </div>
+          <div class="purple-card" style="text-align: center;">
+            <div class="stat-number" style="font-size: 24px;">300</div>
+            <div class="metric-label">第3个月成功匹配数</div>
+          </div>
+          <div class="purple-card" style="text-align: center;">
+            <div class="stat-number" style="font-size: 24px;">1万</div>
+            <div class="metric-label">第12个月用户数</div>
+          </div>
+          <div class="purple-card" style="text-align: center;">
+            <div class="stat-number" style="font-size: 24px;">50+</div>
+            <div class="metric-label">第12个月覆盖活动数</div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 10px;">&#128640; 市场推广策略</h3>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: #4B5563;">
+            <span style="background: var(--seren-purple); color: white; width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0;">1</span>
+            <span><strong>细分切入：</strong>K-pop 演唱会拼房（高痛点，强社区）</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: #4B5563;">
+            <span style="background: var(--seren-purple); color: white; width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0;">2</span>
+            <span><strong>社区驱动增长：</strong>粉丝社交媒体 + 微信群</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: #4B5563;">
+            <span style="background: var(--seren-purple); color: white; width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0;">3</span>
+            <span><strong>裂变机制：</strong>行程卡分享带来自然裂变</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: #4B5563;">
+            <span style="background: var(--seren-purple); color: white; width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0;">4</span>
+            <span><strong>横向扩展：</strong>音乐节 &#8594; 展会 &#8594; 体育赛事</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 14: 安全与信任 ==================== -->
+<div class="slide" data-slide="13">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块六</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">安全与信任：多维验证 + 动态信任评分</h2>
+    <p class="slide-subtitle">Seren 构建 Trust Graph，保障每一次同住都安心。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 12px;">&#128737;&#65039; 多层验证</h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px; background: #F9FAFB; padding: 12px; border-radius: 10px;">
+            <div style="background: #DBEAFE; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px;">&#128100;</div>
+            <div><div style="font-size: 12px; font-weight: 600;">身份验证</div><div style="font-size: 10px; color: #6B7280;">身份证 / 护照 + 实名认证</div></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; background: #F9FAFB; padding: 12px; border-radius: 10px;">
+            <div style="background: #D1FAE5; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px;">&#127915;</div>
+            <div><div style="font-size: 12px; font-weight: 600;">活动验证</div><div style="font-size: 10px; color: #6B7280;">确认真实的活动门票/参与凭证</div></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; background: #F9FAFB; padding: 12px; border-radius: 10px;">
+            <div style="background: #FEF3C7; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px;">&#128179;</div>
+            <div><div style="font-size: 12px; font-weight: 600;">支付工具验证</div><div style="font-size: 10px; color: #6B7280;">绑定有效支付方式</div></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; background: #F9FAFB; padding: 12px; border-radius: 10px;">
+            <div style="background: #EDE9FE; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px;">&#128279;</div>
+            <div><div style="font-size: 12px; font-weight: 600;">社交账号关联</div><div style="font-size: 10px; color: #6B7280;">LinkedIn / 微信 / 微博交叉验证</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 12px;">&#128200; 信任评分（动态更新）</h3>
+        <div style="background: #F9FAFB; border-radius: 14px; padding: 16px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 11px; color: #6B7280;">多方可信度</div>
+              <div style="height: 6px; width: 180px; background: #EDE9FE; border-radius: 3px; margin-top: 4px;"><div style="height: 100%; width: 95%; background: var(--seren-purple); border-radius: 3px;"></div></div>
+            </div>
+            <span style="font-size: 14px; font-weight: 700; color: var(--seren-purple);">95</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 11px; color: #6B7280;">历史评价</div>
+              <div style="height: 6px; width: 180px; background: #EDE9FE; border-radius: 3px; margin-top: 4px;"><div style="height: 100%; width: 88%; background: var(--seren-purple); border-radius: 3px;"></div></div>
+            </div>
+            <span style="font-size: 14px; font-weight: 700; color: var(--seren-purple);">88</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 11px; color: #6B7280;">资料完整度</div>
+              <div style="height: 6px; width: 180px; background: #EDE9FE; border-radius: 3px; margin-top: 4px;"><div style="height: 100%; width: 92%; background: var(--seren-purple); border-radius: 3px;"></div></div>
+            </div>
+            <span style="font-size: 14px; font-weight: 700; color: var(--seren-purple);">92</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 11px; color: #6B7280;">响应及时性</div>
+              <div style="height: 6px; width: 180px; background: #EDE9FE; border-radius: 3px; margin-top: 4px;"><div style="height: 100%; width: 90%; background: var(--seren-purple); border-radius: 3px;"></div></div>
+            </div>
+            <span style="font-size: 14px; font-weight: 700; color: var(--seren-purple);">90</span>
+          </div>
+        </div>
+        <div style="text-align: center;">
+          <div style="display: inline-flex; align-items: center; gap: 12px; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 12px; padding: 12px 24px;">
+            <div style="font-size: 11px; color: #065F46; font-weight: 500;">综合信任分</div>
+            <div class="stat-number" style="font-size: 32px;">91</div>
+            <div style="font-size: 11px; color: #065F46; font-weight: 500;">优秀</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 15: 团队介绍 ==================== -->
+<div class="slide" data-slide="14">
+  <div class="slide-header">
+    <div class="seren-logo"><div class="s-icon">S</div> Seren</div>
+    <div class="slide-tag">模块七</div>
+  </div>
+  <div class="slide-body">
+    <h2 class="slide-title">团队介绍</h2>
+    <p class="slide-subtitle">一支在技术、旅行和社区交汇处充满热情的多元化团队。</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+      <div style="text-align: center; background: #F9FAFB; border-radius: 14px; padding: 20px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #6C3AED, #4338CA); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 12px;">&#128105;&#8205;&#128187;</div>
+        <div style="font-size: 15px; font-weight: 700; color: #1F2937;">产品与战略</div>
+        <div style="font-size: 12px; color: var(--seren-purple); font-weight: 600; margin-bottom: 6px;">CEO / 产品负责人</div>
+        <div style="font-size: 11px; color: #6B7280; line-height: 1.6;">
+          用户研究、产品愿景、商务拓展。深入理解粉丝社区和跨文化旅行需求。
+        </div>
+      </div>
+      <div style="text-align: center; background: #F9FAFB; border-radius: 14px; padding: 20px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #4338CA, #312E81); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 12px;">&#128104;&#8205;&#128187;</div>
+        <div style="font-size: 15px; font-weight: 700; color: #1F2937;">技术研发</div>
+        <div style="font-size: 12px; color: var(--seren-purple); font-weight: 600; margin-bottom: 6px;">CTO / 全栈开发负责人</div>
+        <div style="font-size: 11px; color: #6B7280; line-height: 1.6;">
+          全栈开发、匹配算法设计、AI/ML 架构。React, Node.js, Supabase, LLM 集成。
+        </div>
+      </div>
+      <div style="text-align: center; background: #F9FAFB; border-radius: 14px; padding: 20px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #8B5CF6, #6C3AED); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 12px;">&#127912;</div>
+        <div style="font-size: 15px; font-weight: 700; color: #1F2937;">设计与社区</div>
+        <div style="font-size: 12px; color: var(--seren-purple); font-weight: 600; margin-bottom: 6px;">设计负责人 / 社区运营</div>
+        <div style="font-size: 11px; color: #6B7280; line-height: 1.6;">
+          UI/UX 设计、品牌形象、社区管理。粉丝生态洞察与社交媒体营销。
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+      <div style="background: var(--seren-purple-bg); border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 20px; margin-bottom: 4px;">&#127891;</div>
+        <div style="font-size: 12px; font-weight: 600; color: var(--seren-purple-dark);">学术基础</div>
+        <div style="font-size: 10px; color: #6B7280;">计算机科学、商业管理、设计</div>
+      </div>
+      <div style="background: var(--seren-purple-bg); border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 20px; margin-bottom: 4px;">&#127758;</div>
+        <div style="font-size: 12px; font-weight: 600; color: var(--seren-purple-dark);">跨文化基因</div>
+        <div style="font-size: 10px; color: #6B7280;">中英双语，全球化视野</div>
+      </div>
+      <div style="background: var(--seren-purple-bg); border-radius: 10px; padding: 14px; text-align: center;">
+        <div style="font-size: 20px; margin-bottom: 4px;">&#127926;</div>
+        <div style="font-size: 12px; font-weight: 600; color: var(--seren-purple-dark);">领域专家</div>
+        <div style="font-size: 10px; color: #6B7280;">活跃的 K-pop 粉丝 & 资深活动旅行者</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 幻灯片 16: 结尾 ==================== -->
+<div class="slide hero-slide" data-slide="15">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 48px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 32px;">
+      <div style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--seren-purple); font-weight: 900; font-size: 28px;">S</div>
+      <span style="font-size: 32px; font-weight: 800;">Seren</span>
+    </div>
+    <h1 style="font-size: 42px; font-weight: 900; line-height: 1.25; color: white; margin-bottom: 16px;">
+      AI Agent 匹配<br>让同场的我们，住得更合拍
+    </h1>
+    <p style="font-size: 17px; opacity: 0.7; max-width: 600px; margin-bottom: 36px;">
+      同场 | 同行 | 同住 | 同心
+    </p>
+    <div style="display: flex; gap: 24px; margin-bottom: 40px;">
+      <div style="text-align: center;">
+        <div style="font-size: 28px; font-weight: 900; color: #A7F3D0;">&#128100;</div>
+        <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;">同场</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 28px; font-weight: 900; color: #A7F3D0;">&#128107;</div>
+        <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;">同行</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 28px; font-weight: 900; color: #A7F3D0;">&#127968;</div>
+        <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;">同住</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 28px; font-weight: 900; color: #A7F3D0;">&#10084;&#65039;</div>
+        <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;">同心</div>
+      </div>
+    </div>
+    <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); padding: 12px 28px; border-radius: 12px; font-size: 16px; font-weight: 600;">
+      谢谢 &#128591;
+    </div>
+    <div style="margin-top: 16px; font-size: 13px; opacity: 0.5;">seren.app | 商业发展计划 2026</div>
+  </div>
+</div>
+
+</div><!-- /slide-container -->
+
+<!-- 导航栏 -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">&#8592;</button>
+  <div class="dot-nav" id="dotNav"></div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">&#8594;</button>
+  <div class="slide-counter" id="slideCounter">1 / 16</div>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const dotNav = document.getElementById('dotNav');
+  const counter = document.getElementById('slideCounter');
+
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dotNav.appendChild(dot);
+  }
+
+  function goTo(n) {
+    slides[currentSlide].classList.remove('active');
+    dotNav.children[currentSlide].classList.remove('active');
+    currentSlide = Math.max(0, Math.min(n, total - 1));
+    slides[currentSlide].classList.add('active');
+    dotNav.children[currentSlide].classList.add('active');
+    counter.textContent = `${currentSlide + 1} / ${total}`;
+    document.getElementById('prevBtn').disabled = currentSlide === 0;
+    document.getElementById('nextBtn').disabled = currentSlide === total - 1;
+  }
+
+  function navigate(dir) { goTo(currentSlide + dir); }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); navigate(-1); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+    if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+  });
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  goTo(0);
+</script>
+
+</body>
+</html>
